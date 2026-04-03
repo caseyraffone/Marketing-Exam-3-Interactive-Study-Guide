@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketing Exam Prep</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f8f8f6;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 220px;
+      background: white;
+      border-right: 0.5px solid #1a1a1a;
+      padding: 2rem 0;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0 1.5rem;
+      margin-bottom: 1.5rem;
+      color: #1a1a1a;
+    }
+    .nav-link {
+      display: block;
+      padding: 0.875rem 1.5rem;
+      color: #1a1a1a;
+      text-decoration: none;
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .nav-link:hover {
+      background: #f8f8f6;
+    }
+    .nav-link.active {
+      border-left-color: #1a1a1a;
+      background: #f8f8f6;
+      font-weight: 500;
+    }
+    .main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 2rem;
+    }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+    .card {
+      background: white;
+      border: 0.5px solid #1a1a1a;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0;
+    }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.5px;
+    }
+    h2 {
+      font-size: 20px;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      text-transform: capitalize;
+    }
+    select, input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 0.5px solid #1a1a1a;
+      font-family: inherit;
+      font-size: 14px;
+      background: white;
+      color: #1a1a1a;
+    }
+    select:focus, input:focus {
+      outline: none;
+      box-shadow: inset 0 0 0 1px #1a1a1a;
+    }
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    input[type="range"] {
+      flex: 1;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #f0f0ee;
+      outline: none;
+      border: none;
+      padding: 0;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: #1a1a1a;
+      cursor: pointer;
+      border: 0.5px solid #1a1a1a;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: #1a1a1a;
+      cursor: pointer;
+      border: 0.5px solid #1a1a1a;
+    }
+    .slider-value {
+      min-width: 40px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    button {
+      padding: 0.875rem 2rem;
+      background: #1a1a1a;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    button:hover {
+      background: #333;
+    }
+    button:active {
+      background: #000;
+    }
+    .progress-bar {
+      height: 4px;
+      background: #f0f0ee;
+      margin-bottom: 2rem;
+      border: 0.5px solid #1a1a1a;
+    }
+    .progress {
+      height: 100%;
+      background: #1a1a1a;
+      transition: width 0.3s;
+    }
+    .question-container {
+      margin-bottom: 2rem;
+    }
+    .question-text {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .choice {
+      padding: 1rem;
+      border: 0.5px solid #1a1a1a;
+      cursor: pointer;
+      background: white;
+      transition: all 0.2s;
+      font-size: 14px;
+    }
+    .choice:hover {
+      background: #f8f8f6;
+    }
+    .choice.selected {
+      background: #f0f0ee;
+    }
+    .choice.correct {
+      background: #e8f5e9;
+      border-color: #2e7d32;
+    }
+    .choice.incorrect {
+      background: #ffebee;
+      border-color: #c62828;
+    }
+    .choice.disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    .explanation {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #fafaf8;
+      border-left: 2px solid #1a1a1a;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .results-screen {
+      text-align: center;
+    }
+    .score-display {
+      font-size: 64px;
+      font-weight: 300;
+      margin: 2rem 0;
+      letter-spacing: -1px;
+    }
+    .grade {
+      font-size: 48px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    .review-section {
+      margin-top: 2rem;
+      text-align: left;
+    }
+    .review-item {
+      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      border: 0.5px solid #1a1a1a;
+      background: white;
+    }
+    .review-question {
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+    .review-answer {
+      font-size: 14px;
+      margin: 0.5rem 0;
+    }
+    .correct-answer { color: #2e7d32; font-weight: 500; }
+    .your-answer { color: #c62828; }
+    .topic-filters {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .topic-btn {
+      padding: 0.5rem 1rem;
+      border: 0.5px solid #1a1a1a;
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .topic-btn.active {
+      background: #1a1a1a;
+      color: white;
+    }
+    .mode-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 1.5rem;
+      border-bottom: 0.5px solid #1a1a1a;
+    }
+    .mode-tab {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      color: #1a1a1a;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .mode-tab.active {
+      border-bottom-color: #1a1a1a;
+      font-weight: 500;
+    }
+    .study-content {
+      display: none;
+    }
+    .study-content.active {
+      display: block;
+    }
+    .flashcard-wrapper {
+      perspective: 1000px;
+    }
+    .flashcard {
+      width: 100%;
+      min-height: 300px;
+      background: white;
+      border: 0.5px solid #1a1a1a;
+      padding: 2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 500;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    .flashcard.flipped {
+      transform: rotateY(180deg);
+    }
+    .flashcard-content {
+      backface-visibility: hidden;
+    }
+    .flashcard.flipped .flashcard-content {
+      transform: rotateY(180deg);
+    }
+    .section-header {
+      cursor: pointer;
+      padding: 1rem;
+      background: #f8f8f6;
+      border: 0.5px solid #1a1a1a;
+      font-weight: 500;
+      user-select: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .section-header::after {
+      content: '▼';
+      display: inline-block;
+      transition: transform 0.3s;
+      font-size: 12px;
+    }
+    .section-header.collapsed::after {
+      transform: rotate(-90deg);
+    }
+    .section-content {
+      padding: 1.5rem;
+      border: 0.5px solid #1a1a1a;
+      border-top: none;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .section-content.hidden {
+      display: none;
+    }
+    .scenario-box {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      border: 0.5px solid #1a1a1a;
+      background: white;
+    }
+    .scenario-title {
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      font-size: 16px;
+    }
+    .scenario-description {
+      margin-bottom: 1rem;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .concept { font-weight: 600; }
+    .loading { text-align: center; padding: 2rem; }
+    .spinner {
+      border: 2px solid #f0f0ee;
+      border-top: 2px solid #1a1a1a;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .error {
+      background: #ffebee;
+      border: 0.5px solid #c62828;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      color: #c62828;
+      font-size: 14px;
+    }
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="sidebar-title">Navigation</div>
+      <a class="nav-link active" data-page="quiz">Quiz generator</a>
+      <a class="nav-link" data-page="study">Study guide</a>
+    </div>
+
+    <div class="main">
+      <!-- Quiz Page -->
+      <div id="quiz" class="page active">
+        <h1>Quiz generator</h1>
+        <div class="card">
+          <div id="quizError" class="error" style="display: none;"></div>
+
+          <div id="quizSetup">
+            <div class="form-group">
+              <label>Topic</label>
+              <select id="topic">
+                <option>All Topics</option>
+                <option>Consumer Behavior</option>
+                <option>Product Management</option>
+                <option>Marketing Research</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Difficulty</label>
+              <select id="difficulty">
+                <option>Easy</option>
+                <option>Medium</option>
+                <option>Hard</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Number of questions</label>
+              <div class="slider-container">
+                <input type="range" id="count" min="3" max="15" value="5">
+                <span class="slider-value" id="countValue">5</span>
+              </div>
+            </div>
+
+            <button id="generateBtn" onclick="generateQuiz()">Generate quiz</button>
+          </div>
+
+          <div id="quizContent" style="display: none;">
+            <div class="progress-bar">
+              <div class="progress" id="progressBar" style="width: 0%;"></div>
+            </div>
+
+            <div id="questionArea"></div>
+
+            <div id="resultsScreen" style="display: none;" class="results-screen">
+              <h2>Quiz complete</h2>
+              <div class="grade" id="gradeDisplay"></div>
+              <div class="score-display" id="scoreDisplay"></div>
+              <button onclick="resetQuiz()">Start another quiz</button>
+              <div class="review-section" id="reviewSection"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Study Guide Page -->
+      <div id="study" class="page">
+        <h1>Study guide</h1>
+        <div class="card">
+          <div class="topic-filters">
+            <button class="topic-btn active" data-topic="all">All topics</button>
+            <button class="topic-btn" data-topic="Consumer Behavior">Consumer behavior</button>
+            <button class="topic-btn" data-topic="Product Management">Product management</button>
+            <button class="topic-btn" data-topic="Marketing Research">Marketing research</button>
+          </div>
+
+          <div class="mode-tabs">
+            <button class="mode-tab active" data-mode="summary">Summary</button>
+            <button class="mode-tab" data-mode="flashcards">Flashcards</button>
+            <button class="mode-tab" data-mode="outline">Outline</button>
+            <button class="mode-tab" data-mode="scenarios">Scenarios</button>
+          </div>
+
+          <div id="summary" class="study-content active"></div>
+          <div id="flashcards" class="study-content"></div>
+          <div id="outline" class="study-content"></div>
+          <div id="scenarios" class="study-content"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const studyData = {
+      'Consumer Behavior': {
+        summary: `Consumer Decision Process follows five key steps: problem recognition (consumer identifies a need), information search (seeking knowledge), alternative evaluation (comparing options), outlet selection (choosing where to buy), and postpurchase behavior (satisfaction and loyalty).
+
+Internal influences shape consumer decisions. Perception involves selective exposure, selective attention, selective distortion, and selective retention. The Just Noticeable Difference (JND) and Weber's Law explain how consumers detect changes. Learning occurs through classical conditioning (associating stimuli) and operant conditioning (rewards/punishments). Maslow's hierarchy of needs—physiological, safety, social, esteem, self-actualization—drives purchasing. Attitudes combine cognitive (beliefs), affective (feelings), and behavioral components.
+
+External influences include culture (shared values), subcultures (groups within culture), and reference groups that provide informational influence (data), normative influence (social pressure), and identification influence (aspirational). Family roles—initiator, influencer, decider, purchaser, user—differ for each product.
+
+The evoked set is the group of brands consumers consider. Involvement levels vary (high-involvement = careful deliberation; low-involvement = minimal thought). Cognitive dissonance—post-purchase doubt—drives reassurance-seeking. Hedonic needs emphasize pleasure; utilitarian needs emphasize function.`,
+
+        flashcards: [
+          { front: 'What are the five steps of the consumer decision process?', back: 'Problem recognition → Information search → Alternative evaluation → Outlet selection → Postpurchase behavior' },
+          { front: 'Define selective attention.', back: 'The consumer\'s tendency to focus only on stimuli relevant to their needs, filtering out irrelevant information.' },
+          { front: 'What is classical conditioning?', back: 'Learning through pairing a neutral stimulus with an unconditioned stimulus to create a conditioned response (e.g., Pavlov\'s dogs).' },
+          { front: 'Name Maslow\'s five levels of needs.', back: 'Physiological → Safety → Social → Esteem → Self-actualization' },
+          { front: 'What are the three components of attitudes?', back: 'Cognitive (beliefs), affective (feelings), behavioral (actions)' },
+          { front: 'Define reference groups.', back: 'Groups that individuals use as standards to evaluate their own beliefs, values, and behavior.' },
+          { front: 'What is cognitive dissonance?', back: 'Post-purchase doubt or discomfort when a consumer questions whether they made the right decision.' },
+          { front: 'Distinguish hedonic from utilitarian needs.', back: 'Hedonic = pleasure-seeking (emotional); Utilitarian = functional, problem-solving (rational)' }
+        ],
+
+        outline: [
+          {
+            title: 'Consumer Decision Process (5 Steps)',
+            content: '1. Problem Recognition: Consumer identifies a need or gap\n2. Information Search: Seeking knowledge about solutions\n3. Alternative Evaluation: Comparing options against criteria\n4. Outlet Selection: Choosing where to purchase\n5. Postpurchase Behavior: Evaluating satisfaction, loyalty'
+          },
+          {
+            title: 'Internal Influences',
+            content: 'Perception: Selective exposure, attention, distortion, retention; JND/Weber\'s Law\nLearning: Classical conditioning, operant conditioning\nMotivation: Maslow\'s hierarchy (physiological, safety, social, esteem, self-actualization)\nAttitudes: Cognitive/affective/behavioral components (ABC model)'
+          },
+          {
+            title: 'External Influences',
+            content: 'Culture: Shared values and norms\nSubcultures: Distinct groups within culture\nReference Groups: Provide informational, normative, identification influence\nFamily Roles: Initiator, influencer, decider, purchaser, user'
+          },
+          {
+            title: 'Key Concepts',
+            content: 'Evoked Set: Brands under consideration\nInvolvement: High (deliberate) vs. low (automatic)\nCognitive Dissonance: Post-purchase doubt\nHedonic vs. Utilitarian: Pleasure vs. function'
+          }
+        ],
+
+        scenarios: [
+          {
+            title: 'Buying Your First Car',
+            scenario: 'You need reliable transportation. You search online, read reviews, visit dealerships, compare models, and finally buy a Toyota. Days later, you wonder if you should have chosen Honda instead.',
+            concepts: [
+              { concept: 'Problem Recognition', explanation: 'You identified the need for transportation.' },
+              { concept: 'Information Search', explanation: 'Online research, reviews, and dealership visits.' },
+              { concept: 'Alternative Evaluation', explanation: 'Comparing Toyota, Honda, Ford across price, reliability, features.' },
+              { concept: 'Cognitive Dissonance', explanation: 'Post-purchase doubt about choosing Toyota over Honda.' }
+            ]
+          },
+          {
+            title: 'Luxury Watch Purchase',
+            scenario: 'A successful executive buys a Rolex to signal status to peers and feel accomplished.',
+            concepts: [
+              { concept: 'Esteem Needs', explanation: 'Maslow level: achieving status and recognition.' },
+              { concept: 'Reference Group Influence', explanation: 'Peers set the standard for luxury watches.' },
+              { concept: 'Hedonic Need', explanation: 'Pleasure and emotional satisfaction from owning prestige brand.' }
+            ]
+          }
+        ]
+      },
+
+      'Product Management': {
+        summary: `Service characteristics define product strategy. Intangibility means services cannot be touched or tested. Inseparability means production and consumption occur simultaneously. Heterogeneity—inconsistent service quality—is fixed through standardization and employee training. Perishability—inability to store services—requires capacity management and demand forecasting.
+
+Product line depth (number of variants per category) should be optimized: companies decrease depth to reduce consumer confusion, preserve shelf space, simplify supply chains, reduce manufacturing complexity, and focus resources on high-margin products.
+
+Product mix width refers to the number of product categories offered. SKUs (stock-keeping units) identify unique products. Cannibalization occurs when one product steals sales from another.
+
+The product life cycle has four stages: introduction (slow sales, high costs), growth (rapid sales, economies of scale), maturity (peak sales, high competition), and decline (falling sales, product phase-out).
+
+New product development follows seven stages: strategy (mission and objectives), idea generation (brainstorming), idea screening (eliminating poor ideas), business analysis (financial projections), development (prototype creation), test marketing (limited market launch), and commercialization (full launch).
+
+Brand equity builds through awareness, positive associations, perceived quality, and loyalty. Packaging serves protection, communication, convenience, and promotional functions.`,
+
+        flashcards: [
+          { front: 'Define intangibility in services.', back: 'Services cannot be seen, touched, tasted, or held before purchase.' },
+          { front: 'How do companies address heterogeneity in services?', back: 'Through standardization, employee training, and quality control procedures.' },
+          { front: 'What is the solution to service perishability?', back: 'Capacity management (adjust supply to demand) and demand forecasting.' },
+          { front: 'Why do companies reduce product line depth?', back: 'To reduce confusion, save shelf space, simplify supply chains, reduce complexity, focus on high-margin products.' },
+          { front: 'What is cannibalization?', back: 'When one product steals sales from another product in the same company\'s portfolio.' },
+          { front: 'Name the four stages of the product life cycle.', back: 'Introduction → Growth → Maturity → Decline' },
+          { front: 'What happens during the test marketing stage?', back: 'The product is launched in a limited geographic market to assess consumer response before full commercialization.' },
+          { front: 'What are the four functions of packaging?', back: 'Protection, communication, convenience, and promotion.' }
+        ],
+
+        outline: [
+          {
+            title: 'Four Service Characteristics',
+            content: '1. Intangibility: Cannot be touched/tested before purchase\n2. Inseparability: Production and consumption happen simultaneously\n3. Heterogeneity: Quality varies; fix with training/standardization\n4. Perishability: Cannot be stored; fix with capacity management'
+          },
+          {
+            title: 'Product Line & Mix Decisions',
+            content: 'Line Depth: Number of variants per category (reduce to simplify/focus)\nProduct Mix Width: Number of categories offered\nSKU: Stock-keeping unit identifying each unique product\nCannibalization: One product stealing sales from another'
+          },
+          {
+            title: 'Product Life Cycle (4 Stages)',
+            content: '1. Introduction: Slow sales, high costs, limited distribution\n2. Growth: Rapid sales increase, economies of scale, competition enters\n3. Maturity: Peak sales, intense competition, price pressure\n4. Decline: Falling sales, product exits market'
+          },
+          {
+            title: 'New Product Development (7 Stages)',
+            content: '1. Strategy: Define mission/objectives\n2. Idea Generation: Brainstorming\n3. Idea Screening: Eliminate poor ideas\n4. Business Analysis: Financial projections\n5. Development: Create prototype\n6. Test Marketing: Limited market launch\n7. Commercialization: Full market launch'
+          }
+        ],
+
+        scenarios: [
+          {
+            title: 'Coffee Shop Expanding Service Line',
+            scenario: 'A coffee shop currently offers 20 drink variations. To streamline operations and reduce customer confusion, management decides to cut this to 12 core drinks.',
+            concepts: [
+              { concept: 'Product Line Depth Reduction', explanation: 'Fewer SKUs reduce manufacturing complexity, training costs, and inventory.' },
+              { concept: 'Consumer Confusion', explanation: 'Too many options (20 drinks) overwhelm customers and slow ordering.' },
+              { concept: 'Shelf Space & Supply Chain', explanation: 'Fewer products require less storage and simplify ingredient sourcing.' }
+            ]
+          },
+          {
+            title: 'Netflix Streaming Service',
+            scenario: 'Netflix launched basic, standard, and premium tiers. Some customers complained that premium offered too similar value, cannibalizing standard subscriptions.',
+            concepts: [
+              { concept: 'Product Mix Width', explanation: 'Multiple subscription tiers serve different customer segments.' },
+              { concept: 'Cannibalization', explanation: 'Premium tier stealing sales from standard tier, not increasing revenue.' },
+              { concept: 'Service Characteristics', explanation: 'Streaming is intangible, inseparable (instant delivery), and perishable (daily content change).' }
+            ]
+          }
+        ]
+      },
+
+      'Marketing Research': {
+        summary: `The six-step marketing research process is: define the problem, develop the research plan, collect data, analyze data, present findings, and make strategic decisions.
+
+Primary research involves collecting new data through focus groups (8–12 participants discussing product in depth), depth interviews (one-on-one exploration), ethnography (observing consumers in natural settings), surveys (questionnaires), and experiments (controlled tests). Secondary research uses existing data from government reports, academic papers, and company databases.
+
+Qualitative research explores "why" and "how" through narrative and subjective insights. Quantitative research measures "how much" or "how many" through numerical analysis.
+
+The McDonald's All-Day Breakfast case illustrates research in action. Symptoms: declining sales and rising wait times. Management initially assumed menu fatigue. Research (surveys, focus groups, ethnography) revealed operational inefficiencies in the kitchen. Solution: scaled back the ADB menu and streamlined processes. Result: stabilized sales and improved customer satisfaction.
+
+Sampling methods include probability sampling (random, stratified, cluster, systematic—each unit has known selection probability) and non-probability sampling (convenience, judgment, quota, snowball—selection probability unknown). Measurement scales range from nominal (categories) to ratio (absolute zero with equal intervals).
+
+Validity measures whether the research truly captures what it aims to measure. Reliability measures consistency and reproducibility. A/B testing compares two versions to determine the better performer. Perceptual mapping visualizes product positions in consumer minds. Conjoint analysis determines attribute importance in purchase decisions.`,
+
+        flashcards: [
+          { front: 'What are the six steps of the marketing research process?', back: 'Define problem → Develop plan → Collect data → Analyze data → Present findings → Make decision' },
+          { front: 'How many people should be in a focus group?', back: 'Typically 8–12 participants to allow deep discussion without dominance.' },
+          { front: 'What is the difference between primary and secondary research?', back: 'Primary: new data collected directly (surveys, interviews). Secondary: existing data from external sources.' },
+          { front: 'What is ethnography?', back: 'Qualitative method where researchers observe consumers in their natural environment to understand behavior.' },
+          { front: 'Define probability sampling.', back: 'Each unit in population has known, non-zero chance of selection (random, stratified, cluster, systematic).' },
+          { front: 'What is conjoint analysis?', back: 'Research method determining how consumers value product attributes and features.' },
+          { front: 'Distinguish validity from reliability.', back: 'Validity: does research measure what it intends? Reliability: are results consistent and reproducible?' },
+          { front: 'What did the McDonald\'s All-Day Breakfast research reveal?', back: 'Operational inefficiencies in kitchen (not menu fatigue) caused declining sales and wait times.' }
+        ],
+
+        outline: [
+          {
+            title: '6-Step Marketing Research Process',
+            content: '1. Define the Problem: What needs to be understood?\n2. Develop the Plan: Design methodology\n3. Collect Data: Gather information\n4. Analyze Data: Find patterns and insights\n5. Present Findings: Communicate results\n6. Make Decision: Act on insights'
+          },
+          {
+            title: 'Research Methods',
+            content: 'Qualitative (explores "why"): Focus groups (8–12), depth interviews, ethnography\nQuantitative (measures "how much"): Surveys, experiments, scanner data'
+          },
+          {
+            title: 'Sampling Methods',
+            content: 'Probability (known selection probability): Random, stratified, cluster, systematic\nNon-probability (unknown probability): Convenience, judgment, quota, snowball'
+          },
+          {
+            title: 'Measurement & Analysis',
+            content: 'Scales: Nominal (categories) → Ordinal (rank) → Interval (equal spacing) → Ratio (absolute zero)\nValidity: Does it measure intended construct?\nReliability: Are results consistent?\nA/B testing, perceptual mapping, conjoint analysis'
+          }
+        ],
+
+        scenarios: [
+          {
+            title: 'McDonald\'s All-Day Breakfast Case Study',
+            scenario: 'McDonald\'s launched All-Day Breakfast but experienced declining sales and increasing order wait times. Management initially blamed menu fatigue (too many menu items). A research study was commissioned.',
+            concepts: [
+              { concept: 'Symptom vs. Root Cause', explanation: 'Declining sales (symptom) was caused by operational inefficiencies (root cause), not menu fatigue.' },
+              { concept: 'Research Methods Used', explanation: 'Surveys, focus groups, and ethnography revealed kitchen bottlenecks.' },
+              { concept: 'Solution Applied', explanation: 'Scaled back ADB offerings and streamlined kitchen processes.' },
+              { concept: 'Result', explanation: 'Stabilized sales and improved customer satisfaction through operational efficiency.' }
+            ]
+          },
+          {
+            title: 'New Smartphone Feature Testing',
+            scenario: 'A tech company wants to test two designs for a camera interface—Option A (button in corner) vs. Option B (gesture-based). They conduct an A/B test with 10,000 users split 50/50, measuring task completion time and satisfaction.',
+            concepts: [
+              { concept: 'A/B Testing', explanation: 'Comparing two versions to determine which performs better.' },
+              { concept: 'Quantitative Research', explanation: 'Measuring task time and satisfaction scores numerically.' },
+              { concept: 'Sample Size', explanation: '10,000 users is large enough for statistical significance.' },
+              { concept: 'Validity', explanation: 'Task completion and satisfaction are valid measures of usability.' }
+            ]
+          }
+        ]
+      }
+    };
+
+    // Quiz Logic
+    let currentQuiz = null;
+    let currentQuestion = 0;
+    let score = 0;
+    let userAnswers = [];
+
+    document.getElementById('count').addEventListener('input', (e) => {
+      document.getElementById('countValue').textContent = e.target.value;
+    });
+
+    async function generateQuiz() {
+      const topic = document.getElementById('topic').value;
+      const difficulty = document.getElementById('difficulty').value;
+      const count = document.getElementById('count').value;
+
+      document.getElementById('quizSetup').style.display = 'none';
+      document.getElementById('quizContent').style.display = 'block';
+      document.getElementById('quizError').style.display = 'none';
+      document.getElementById('questionArea').innerHTML = '<div class="loading"><div class="spinner"></div><p>Generating questions...</p></div>';
+
+      try {
+        const response = await fetch('/api/quiz', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ topic, difficulty, count })
+        });
+
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.error || 'Failed to generate quiz');
+        }
+
+        const data = await response.json();
+        currentQuiz = data.questions;
+        currentQuestion = 0;
+        score = 0;
+        userAnswers = [];
+        showQuestion();
+      } catch (err) {
+        document.getElementById('quizError').textContent = 'Error: ' + err.message;
+        document.getElementById('quizError').style.display = 'block';
+        document.getElementById('quizSetup').style.display = 'block';
+        document.getElementById('quizContent').style.display = 'none';
+      }
+    }
+
+    function showQuestion() {
+      if (!currentQuiz || currentQuestion >= currentQuiz.length) {
+        showResults();
+        return;
+      }
+
+      const q = currentQuiz[currentQuestion];
+      const progress = ((currentQuestion + 1) / currentQuiz.length) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+
+      let html = `
+        <h2>Question ${currentQuestion + 1} of ${currentQuiz.length}</h2>
+        <div class="question-container">
+          <div class="question-text">${q.question}</div>
+          <div class="choices">
+      `;
+
+      for (const [key, choice] of Object.entries(q.choices)) {
+        html += `<div class="choice" onclick="selectAnswer('${key}')" data-choice="${key}">${key}. ${choice}</div>`;
+      }
+
+      html += `</div></div><div id="explanation" style="display: none;"></div>`;
+      document.getElementById('questionArea').innerHTML = html;
+    }
+
+    function selectAnswer(choice) {
+      const q = currentQuiz[currentQuestion];
+      const isCorrect = choice === q.correct;
+
+      if (isCorrect) score++;
+      userAnswers.push({ question: q.question, userAnswer: choice, correct: q.correct, isCorrect, explanation: q.explanation, topic: q.topic });
+
+      // Show feedback
+      document.querySelectorAll('.choice').forEach(el => {
+        el.classList.add('disabled');
+        if (el.dataset.choice === q.correct) el.classList.add('correct');
+        if (el.dataset.choice === choice && !isCorrect) el.classList.add('incorrect');
+      });
+
+      const explDiv = document.getElementById('explanation');
+      explDiv.innerHTML = `<strong>${isCorrect ? 'Correct!' : 'Incorrect.'}</strong> ${q.explanation}`;
+      explDiv.style.display = 'block';
+
+      setTimeout(() => {
+        currentQuestion++;
+        showQuestion();
+      }, 2500);
+    }
+
+    function showResults() {
+      document.getElementById('questionArea').style.display = 'none';
+      const percentage = (score / currentQuiz.length) * 100;
+      let grade = 'F';
+      if (percentage >= 90) grade = 'A';
+      else if (percentage >= 80) grade = 'B';
+      else if (percentage >= 70) grade = 'C';
+      else if (percentage >= 60) grade = 'D';
+
+      document.getElementById('gradeDisplay').textContent = grade;
+      document.getElementById('scoreDisplay').textContent = `${score}/${currentQuiz.length}`;
+
+      let reviewHtml = '<h3>Review</h3>';
+      userAnswers.forEach((a, i) => {
+        reviewHtml += `
+          <div class="review-item">
+            <div class="review-question">${i + 1}. ${a.question}</div>
+            <div class="review-answer"><span class="your-answer">Your answer: ${a.userAnswer}</span></div>
+            <div class="review-answer"><span class="correct-answer">Correct: ${a.correct}</span></div>
+            <div class="review-answer">${a.explanation}</div>
+            <div style="font-size: 12px; color: #666; margin-top: 0.5rem;">Topic: ${a.topic}</div>
+          </div>
+        `;
+      });
+      document.getElementById('reviewSection').innerHTML = reviewHtml;
+      document.getElementById('resultsScreen').style.display = 'block';
+    }
+
+    function resetQuiz() {
+      currentQuiz = null;
+      document.getElementById('questionArea').style.display = 'block';
+      document.getElementById('resultsScreen').style.display = 'none';
+      document.getElementById('quizContent').style.display = 'none';
+      document.getElementById('quizSetup').style.display = 'block';
+    }
+
+    // Study Guide Logic
+    document.querySelectorAll('.topic-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateStudyContent();
+      });
+    });
+
+    document.querySelectorAll('.mode-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        updateStudyContent();
+      });
+    });
+
+    function updateStudyContent() {
+      const activeTopic = document.querySelector('.topic-btn.active').dataset.topic;
+      const activeMode = document.querySelector('.mode-tab.active').dataset.mode;
+
+      document.querySelectorAll('.study-content').forEach(el => el.classList.remove('active'));
+
+      let content = '';
+      const topicData = activeTopic === 'all' ? null : studyData[activeTopic];
+
+      if (activeMode === 'summary') {
+        if (activeTopic === 'all') {
+          content = Object.entries(studyData).map(([topic, data]) => `<h3>${topic}</h3><p>${data.summary}</p>`).join('');
+        } else {
+          content = `<p>${topicData.summary}</p>`;
+        }
+      } else if (activeMode === 'flashcards') {
+        const cards = activeTopic === 'all' ? Object.values(studyData).flatMap(d => d.flashcards) : topicData.flashcards;
+        content = cards.map((card, i) => `
+          <div class="flashcard-wrapper" onclick="flipFlashcard(this)">
+            <div class="flashcard" data-flipped="false">
+              <div class="flashcard-content">${card.front}</div>
+            </div>
+          </div>
+          <p style="text-align: center; margin: 1rem 0; font-size: 12px; color: #666;">Click to reveal answer</p>
+        `).join('');
+      } else if (activeMode === 'outline') {
+        const sections = activeTopic === 'all' ? Object.entries(studyData).flatMap(([topic, data]) => data.outline.map(s => ({ ...s, topic }))) : topicData.outline.map(s => ({ ...s, topic: activeTopic }));
+        content = sections.map(section => `
+          <div class="section-header">${section.title}</div>
+          <div class="section-content"><pre style="white-space: pre-wrap; font-family: inherit;">${section.content}</pre></div>
+        `).join('');
+      } else if (activeMode === 'scenarios') {
+        const scens = activeTopic === 'all' ? Object.values(studyData).flatMap(d => d.scenarios) : topicData.scenarios;
+        content = scens.map(s => `
+          <div class="scenario-box">
+            <div class="scenario-title">${s.title}</div>
+            <div class="scenario-description">${s.scenario}</div>
+            ${s.concepts.map(c => `<div style="margin-bottom: 0.75rem;"><span class="concept">${c.concept}:</span> ${c.explanation}</div>`).join('')}
+          </div>
+        `).join('');
+      }
+
+      const contentDiv = document.getElementById(activeMode);
+      contentDiv.innerHTML = content;
+      contentDiv.classList.add('active');
+
+      // Attach collapse handlers to outline
+      if (activeMode === 'outline') {
+        document.querySelectorAll('.section-header').forEach(header => {
+          header.addEventListener('click', () => {
+            header.classList.toggle('collapsed');
+            header.nextElementSibling.classList.toggle('hidden');
+          });
+        });
+      }
+    }
+
+    function flipFlashcard(wrapper) {
+      const card = wrapper.querySelector('.flashcard');
+      card.classList.toggle('flipped');
+      const isFlipped = card.classList.contains('flipped');
+      const data = card.parentElement.parentElement;
+      const flashcard = studyData[Object.keys(studyData)[0]].flashcards[0]; // Simplified for demo
+
+      if (isFlipped) {
+        const allCards = Object.values(studyData).flatMap(d => d.flashcards);
+        const cardIndex = Array.from(document.querySelectorAll('.flashcard-wrapper')).indexOf(wrapper);
+        card.querySelector('.flashcard-content').textContent = allCards[cardIndex].back;
+      } else {
+        const allCards = Object.values(studyData).flatMap(d => d.flashcards);
+        const cardIndex = Array.from(document.querySelectorAll('.flashcard-wrapper')).indexOf(wrapper);
+        card.querySelector('.flashcard-content').textContent = allCards[cardIndex].front;
+      }
+    }
+
+    // Navigation
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        link.classList.add('active');
+        const pageId = link.dataset.page;
+        document.getElementById(pageId).classList.add('active');
+        if (pageId === 'study') updateStudyContent();
+      });
+    });
+
+    // Initialize study content on first load
+    updateStudyContent();
+  </script>
+</body>
+</html>
