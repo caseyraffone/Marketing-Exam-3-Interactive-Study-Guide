@@ -236,25 +236,35 @@
     }
     .topic-section-label:first-child { margin-top: 0; }
 
-    /* ── Summary concept cards ── */
-    .concept-grid { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem; }
+    /* ── Concept cards ── */
+    .concept-card-grid { display: flex; flex-direction: column; gap: 16px; margin-bottom: 1.5rem; }
     .concept-card {
       background: #fff;
-      border: 0.5px solid #e8e8e6;
+      border: 0.5px solid #e0e0e0;
       border-radius: 8px;
       padding: 20px 22px;
     }
-    .concept-card-title { font-size: 15px; font-weight: 500; color: #1a1a1a; margin-bottom: 0.375rem; }
-    .concept-card-def { font-size: 13px; color: #555; line-height: 1.65; margin-bottom: 0.75rem; }
+    .concept-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; gap: 1rem; }
+    .concept-card-title { font-size: 15px; font-weight: 500; color: #1a1a1a; }
+    .concept-card-tag {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #999;
+      white-space: nowrap;
+      padding-top: 2px;
+    }
+    .concept-card-def { font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 12px; }
     .concept-card-bullets { list-style: none; padding: 0; margin: 0; }
     .concept-card-bullets li {
       font-size: 13px;
-      color: #555;
-      padding: 0.2rem 0 0.2rem 1rem;
+      color: #444;
+      padding: 3px 0 3px 14px;
       position: relative;
       line-height: 1.55;
     }
-    .concept-card-bullets li::before { content: '–'; position: absolute; left: 0; color: #ccc; }
+    .concept-card-bullets li::before { content: '–'; position: absolute; left: 0; color: #bbb; }
 
     /* ── Flashcards ── */
     .flashcard-grid { display: flex; flex-direction: column; gap: 1.25rem; }
@@ -415,225 +425,169 @@
       <!-- Study Guide Page -->
       <div id="study" class="page">
         <h1>Study guide</h1>
-        <div class="card">
-          <div class="topic-filters">
-            <button class="topic-btn active" data-topic="all">All topics</button>
-            <button class="topic-btn" data-topic="Consumer Behavior">Consumer behavior</button>
-            <button class="topic-btn" data-topic="Product Management">Product management</button>
-            <button class="topic-btn" data-topic="Marketing Research">Marketing research</button>
-          </div>
-
-          <div class="mode-tabs">
-            <button class="mode-tab active" data-mode="summary">Summary</button>
-            <button class="mode-tab" data-mode="flashcards">Flashcards</button>
-            <button class="mode-tab" data-mode="outline">Outline</button>
-            <button class="mode-tab" data-mode="scenarios">Scenarios</button>
-          </div>
-
-          <div id="summary" class="study-content active"></div>
-          <div id="flashcards" class="study-content"></div>
-          <div id="outline" class="study-content"></div>
-          <div id="scenarios" class="study-content"></div>
+        <p class="page-subtitle">Select a topic to filter. Each card covers one testable concept.</p>
+        <div class="topic-filters">
+          <button class="topic-btn active" data-topic="all">All topics</button>
+          <button class="topic-btn" data-topic="cb">Consumer Behavior</button>
+          <button class="topic-btn" data-topic="product">Product Management</button>
+          <button class="topic-btn" data-topic="research">Marketing Research</button>
         </div>
+        <div id="conceptCards"></div>
       </div>
     </div>
   </div>
 
   <script>
-    const studyData = {
-      'Consumer Behavior': {
-        summary: [
-          { name: 'Consumer decision process', definition: 'The five-step journey a consumer takes from identifying a need through evaluating the purchase.', bullets: ['Problem recognition — consumer identifies a need or gap', 'Information search — seeking knowledge about solutions', 'Alternative evaluation — comparing options against criteria', 'Outlet selection — choosing where to buy', 'Postpurchase behavior — satisfaction, loyalty, or dissonance'] },
-          { name: 'Perception', definition: 'How consumers select, organize, and interpret sensory information to form a meaningful picture of the world.', bullets: ['Selective exposure — choosing what to notice', 'Selective attention — focusing on relevant stimuli', 'Selective distortion — interpreting info to fit existing beliefs', 'Selective retention — remembering information that supports attitudes', 'JND / Weber\'s Law — minimum change required for a consumer to notice a difference'] },
-          { name: 'Learning', definition: 'Changes in behavior resulting from experience, information, or repeated exposure.', bullets: ['Classical conditioning — pairing a neutral stimulus with an unconditioned one (Pavlov)', 'Operant conditioning — reinforcement and punishment shape future behavior'] },
-          { name: "Maslow's hierarchy of needs", definition: 'A motivational model ranking human needs from basic survival to self-fulfillment; lower levels must be satisfied first.', bullets: ['1. Physiological — food, water, shelter', '2. Safety — security, stability', '3. Social — belonging, love, community', '4. Esteem — status, recognition, achievement', '5. Self-actualization — realizing full potential'] },
-          { name: 'Attitudes', definition: 'Learned predispositions to respond in a consistently favorable or unfavorable way toward a person, object, or idea.', bullets: ['Cognitive component — beliefs and knowledge about the object', 'Affective component — feelings and emotions', 'Behavioral component — action tendencies and intentions (ABC model)'] },
-          { name: 'Social & external influences', definition: 'Outside forces from culture, groups, and family that shape what consumers buy and why.', bullets: ['Culture — shared values and norms of a society', 'Subcultures — distinct groups within a broader culture', 'Reference groups — informational (data), normative (social pressure), identification (aspirational)', 'Family roles: initiator, influencer, decider, purchaser, user'] },
-          { name: 'Key decision concepts', definition: 'Additional factors that affect how consumers make and feel about choices.', bullets: ['Evoked set — the brands a consumer actively considers', 'High involvement — deliberate, effortful decision-making', 'Low involvement — automatic, habitual decisions', 'Cognitive dissonance — post-purchase doubt or regret', 'Hedonic needs — pleasure-seeking and emotional satisfaction', 'Utilitarian needs — functional, problem-solving purchases'] },
-        ],
-
-        flashcards: [
-          { front: 'What are the five steps of the consumer decision process?', back: 'Problem recognition → Information search → Alternative evaluation → Outlet selection → Postpurchase behavior' },
-          { front: 'Define selective attention.', back: 'The consumer\'s tendency to focus only on stimuli relevant to their needs, filtering out irrelevant information.' },
-          { front: 'What is classical conditioning?', back: 'Learning through pairing a neutral stimulus with an unconditioned stimulus to create a conditioned response (e.g., Pavlov\'s dogs).' },
-          { front: 'Name Maslow\'s five levels of needs.', back: 'Physiological → Safety → Social → Esteem → Self-actualization' },
-          { front: 'What are the three components of attitudes?', back: 'Cognitive (beliefs), affective (feelings), behavioral (actions)' },
-          { front: 'Define reference groups.', back: 'Groups that individuals use as standards to evaluate their own beliefs, values, and behavior.' },
-          { front: 'What is cognitive dissonance?', back: 'Post-purchase doubt or discomfort when a consumer questions whether they made the right decision.' },
-          { front: 'Distinguish hedonic from utilitarian needs.', back: 'Hedonic = pleasure-seeking (emotional); Utilitarian = functional, problem-solving (rational)' }
-        ],
-
-        outline: [
-          {
-            title: 'Consumer Decision Process (5 Steps)',
-            content: '1. Problem Recognition: Consumer identifies a need or gap\n2. Information Search: Seeking knowledge about solutions\n3. Alternative Evaluation: Comparing options against criteria\n4. Outlet Selection: Choosing where to purchase\n5. Postpurchase Behavior: Evaluating satisfaction, loyalty'
-          },
-          {
-            title: 'Internal Influences',
-            content: 'Perception: Selective exposure, attention, distortion, retention; JND/Weber\'s Law\nLearning: Classical conditioning, operant conditioning\nMotivation: Maslow\'s hierarchy (physiological, safety, social, esteem, self-actualization)\nAttitudes: Cognitive/affective/behavioral components (ABC model)'
-          },
-          {
-            title: 'External Influences',
-            content: 'Culture: Shared values and norms\nSubcultures: Distinct groups within culture\nReference Groups: Provide informational, normative, identification influence\nFamily Roles: Initiator, influencer, decider, purchaser, user'
-          },
-          {
-            title: 'Key Concepts',
-            content: 'Evoked Set: Brands under consideration\nInvolvement: High (deliberate) vs. low (automatic)\nCognitive Dissonance: Post-purchase doubt\nHedonic vs. Utilitarian: Pleasure vs. function'
-          }
-        ],
-
-        scenarios: [
-          {
-            title: 'Buying Your First Car',
-            scenario: 'You need reliable transportation. You search online, read reviews, visit dealerships, compare models, and finally buy a Toyota. Days later, you wonder if you should have chosen Honda instead.',
-            concepts: [
-              { concept: 'Problem Recognition', explanation: 'You identified the need for transportation.' },
-              { concept: 'Information Search', explanation: 'Online research, reviews, and dealership visits.' },
-              { concept: 'Alternative Evaluation', explanation: 'Comparing Toyota, Honda, Ford across price, reliability, features.' },
-              { concept: 'Cognitive Dissonance', explanation: 'Post-purchase doubt about choosing Toyota over Honda.' }
-            ]
-          },
-          {
-            title: 'Luxury Watch Purchase',
-            scenario: 'A successful executive buys a Rolex to signal status to peers and feel accomplished.',
-            concepts: [
-              { concept: 'Esteem Needs', explanation: 'Maslow level: achieving status and recognition.' },
-              { concept: 'Reference Group Influence', explanation: 'Peers set the standard for luxury watches.' },
-              { concept: 'Hedonic Need', explanation: 'Pleasure and emotional satisfaction from owning prestige brand.' }
-            ]
-          }
+    const concepts = [
+      // ── Consumer Behavior ──────────────────────────────────────────
+      { topic: 'cb', title: 'Consumer Decision Process', tag: '5 Steps',
+        definition: 'The five stages consumers go through from identifying a need to evaluating their purchase.',
+        points: [
+          'Problem recognition — desired state ≠ actual state (active vs inactive problem)',
+          'Information search — internal (memory) vs external (ads, reviews); high knowledge = less search',
+          'Alternative evaluation — evaluative criteria, compensatory vs non-compensatory rules, evoked set',
+          'Outlet selection &amp; purchase — where, when, and how to buy',
+          'Postpurchase — satisfaction, cognitive dissonance, loyalty or switching'
+        ]
+      },
+      { topic: 'cb', title: 'Internal Influences', tag: 'Psychological',
+        definition: 'Factors inside the consumer shaping perception and decisions.',
+        points: [
+          'Perception — selective exposure, attention, distortion, retention',
+          'JND &amp; Weber\'s Law — minimum detectable change in a stimulus',
+          'Learning — classical conditioning (paired stimuli) and operant conditioning (reinforcement/punishment)',
+          'Maslow\'s hierarchy — physiological, safety, social, esteem, self-actualization',
+          'Attitudes — cognitive (beliefs) + affective (feelings) + behavioral (action tendency)'
+        ]
+      },
+      { topic: 'cb', title: 'External Influences', tag: 'Social',
+        definition: 'Outside forces shaping consumer purchasing decisions.',
+        points: [
+          'Culture — accumulated values, beliefs, behavioral patterns of a society',
+          'Subcultures — teenagers, African American, Southerners, Hispanic, Asian American',
+          'Reference groups — informational, normative, identification',
+          'Family roles — initiator, influencer, decider, purchaser, user',
+          'Social class — upper, middle, working, lower'
+        ]
+      },
+      { topic: 'cb', title: 'Key Concepts', tag: 'Must Know',
+        definition: 'High-priority terms tested most frequently.',
+        points: [
+          'Evoked set — brands that survive information search and are actively considered',
+          'Involvement — high (extended problem solving) vs low (routine/habitual)',
+          'Cognitive dissonance — post-purchase doubt; reduced by warranties and follow-up',
+          'Hedonic vs utilitarian needs — pleasure-driven vs functional',
+          'Mood congruence — emotional state at purchase influences decisions'
         ]
       },
 
-      'Product Management': {
-        summary: [
-          { name: 'Four service characteristics', definition: 'Unique properties that distinguish services from physical products, each requiring a distinct management response.', bullets: ['Intangibility — cannot be seen, touched, or tested before purchase', 'Inseparability — production and consumption occur simultaneously', 'Heterogeneity — quality varies person to person; fix with training and standardization', 'Perishability — cannot be stored or inventoried; fix with capacity management'] },
-          { name: 'Product line depth', definition: 'The number of variants within a single product category. Companies deliberately reduce depth to sharpen focus.', bullets: ['Reduces consumer confusion from too many similar choices', 'Preserves retail shelf space for top performers', 'Simplifies supply chain and procurement', 'Reduces manufacturing complexity and cost', 'Concentrates resources on high-margin products'] },
-          { name: 'Product mix, SKUs & cannibalization', definition: 'The architecture of a company\'s full product portfolio and the risks of overlap within it.', bullets: ['Product mix width — number of distinct product categories offered', 'SKU (stock-keeping unit) — unique identifier for each individual product variant', 'Cannibalization — when a new product steals sales from an existing one in the same portfolio'] },
-          { name: 'Product life cycle', definition: 'The four stages a product passes through from market entry to eventual exit.', bullets: ['Introduction — slow sales, high costs, limited awareness', 'Growth — rapid sales increase, new competitors enter, economies of scale', 'Maturity — peak sales, intense competition, price pressure, market saturation', 'Decline — falling sales, reduced investment, product phase-out'] },
-          { name: 'New product development (7 stages)', definition: 'A structured process for bringing new products to market while filtering out weak ideas early.', bullets: ['1. Strategy — define mission and objectives', '2. Idea generation — brainstorming and sourcing new concepts', '3. Idea screening — eliminate poor or risky ideas early', '4. Business analysis — financial projections and feasibility', '5. Development — build and test a prototype', '6. Test marketing — limited geographic launch to assess response', '7. Commercialization — full-scale market launch'] },
-          { name: 'Brand equity & packaging', definition: 'The added value a strong brand brings, and the role packaging plays in delivering it at point of sale.', bullets: ['Brand awareness — recognition and recall in the consumer\'s mind', 'Brand associations — mental connections and emotional meaning', 'Perceived quality — consumer\'s subjective assessment of superiority', 'Brand loyalty — consistent repeat purchase behavior', 'Packaging functions: protection, communication, convenience, promotion'] },
-        ],
-
-        flashcards: [
-          { front: 'Define intangibility in services.', back: 'Services cannot be seen, touched, tasted, or held before purchase.' },
-          { front: 'How do companies address heterogeneity in services?', back: 'Through standardization, employee training, and quality control procedures.' },
-          { front: 'What is the solution to service perishability?', back: 'Capacity management (adjust supply to demand) and demand forecasting.' },
-          { front: 'Why do companies reduce product line depth?', back: 'To reduce confusion, save shelf space, simplify supply chains, reduce complexity, focus on high-margin products.' },
-          { front: 'What is cannibalization?', back: 'When one product steals sales from another product in the same company\'s portfolio.' },
-          { front: 'Name the four stages of the product life cycle.', back: 'Introduction → Growth → Maturity → Decline' },
-          { front: 'What happens during the test marketing stage?', back: 'The product is launched in a limited geographic market to assess consumer response before full commercialization.' },
-          { front: 'What are the four functions of packaging?', back: 'Protection, communication, convenience, and promotion.' }
-        ],
-
-        outline: [
-          {
-            title: 'Four Service Characteristics',
-            content: '1. Intangibility: Cannot be touched/tested before purchase\n2. Inseparability: Production and consumption happen simultaneously\n3. Heterogeneity: Quality varies; fix with training/standardization\n4. Perishability: Cannot be stored; fix with capacity management'
-          },
-          {
-            title: 'Product Line & Mix Decisions',
-            content: 'Line Depth: Number of variants per category (reduce to simplify/focus)\nProduct Mix Width: Number of categories offered\nSKU: Stock-keeping unit identifying each unique product\nCannibalization: One product stealing sales from another'
-          },
-          {
-            title: 'Product Life Cycle (4 Stages)',
-            content: '1. Introduction: Slow sales, high costs, limited distribution\n2. Growth: Rapid sales increase, economies of scale, competition enters\n3. Maturity: Peak sales, intense competition, price pressure\n4. Decline: Falling sales, product exits market'
-          },
-          {
-            title: 'New Product Development (7 Stages)',
-            content: '1. Strategy: Define mission/objectives\n2. Idea Generation: Brainstorming\n3. Idea Screening: Eliminate poor ideas\n4. Business Analysis: Financial projections\n5. Development: Create prototype\n6. Test Marketing: Limited market launch\n7. Commercialization: Full market launch'
-          }
-        ],
-
-        scenarios: [
-          {
-            title: 'Coffee Shop Expanding Service Line',
-            scenario: 'A coffee shop currently offers 20 drink variations. To streamline operations and reduce customer confusion, management decides to cut this to 12 core drinks.',
-            concepts: [
-              { concept: 'Product Line Depth Reduction', explanation: 'Fewer SKUs reduce manufacturing complexity, training costs, and inventory.' },
-              { concept: 'Consumer Confusion', explanation: 'Too many options (20 drinks) overwhelm customers and slow ordering.' },
-              { concept: 'Shelf Space & Supply Chain', explanation: 'Fewer products require less storage and simplify ingredient sourcing.' }
-            ]
-          },
-          {
-            title: 'Netflix Streaming Service',
-            scenario: 'Netflix launched basic, standard, and premium tiers. Some customers complained that premium offered too similar value, cannibalizing standard subscriptions.',
-            concepts: [
-              { concept: 'Product Mix Width', explanation: 'Multiple subscription tiers serve different customer segments.' },
-              { concept: 'Cannibalization', explanation: 'Premium tier stealing sales from standard tier, not increasing revenue.' },
-              { concept: 'Service Characteristics', explanation: 'Streaming is intangible, inseparable (instant delivery), and perishable (daily content change).' }
-            ]
-          }
+      // ── Product Management ─────────────────────────────────────────
+      { topic: 'product', title: '4 Service Characteristics', tag: 'Core Concept',
+        definition: 'What makes services fundamentally different from goods.',
+        points: [
+          'Intangibility — cannot be seen or tested before purchase',
+          'Inseparability — produced and consumed simultaneously; quality tied to provider',
+          'Heterogeneity — variability in delivery; training is the key management solution',
+          'Perishability — cannot be stored; idle capacity = permanently lost revenue'
+        ]
+      },
+      { topic: 'product', title: 'Product Line &amp; Mix', tag: 'Structure',
+        definition: 'How companies organize their full portfolio.',
+        points: [
+          'Product line — group of related products by function, customer, or price',
+          'Product line depth — number of items within a single line',
+          'Product mix width — total number of different product lines offered',
+          'SKU — stock keeping unit; a specific product variant (e.g. 12oz vs 24oz)'
+        ]
+      },
+      { topic: 'product', title: 'Decreasing Line Depth', tag: 'Strategy',
+        definition: 'Why companies trim their product portfolios.',
+        points: [
+          'Reduce consumer confusion from too many similar options',
+          'Optimize shelf space and meet retailer demands',
+          'Improve supply chain and manufacturing efficiency',
+          'Focus resources on high-margin, high-turnover products',
+          'Avoid cannibalization — new products stealing sales from existing ones'
+        ]
+      },
+      { topic: 'product', title: 'Product Life Cycle', tag: 'Framework',
+        definition: 'The four stages from launch to exit.',
+        points: [
+          'Introduction — low sales, high costs, losses typical',
+          'Growth — rising sales and profits, new competitors enter',
+          'Maturity — peak sales, intense competition, profit flattens',
+          'Decline — falling sales, decisions about exit or harvest'
+        ]
+      },
+      { topic: 'product', title: 'New Product Development', tag: '7 Stages',
+        definition: 'The funnel from idea to market.',
+        points: [
+          'Strategy → Idea generation → Idea screening',
+          'Business analysis → Development → Test marketing → Commercialization',
+          'Each stage filters out weak ideas before the next investment',
+          'Cannibalization risk assessed in the business analysis stage'
         ]
       },
 
-      'Marketing Research': {
-        summary: [
-          { name: '6-step research process', definition: 'A systematic framework for gathering and applying information to support better marketing decisions.', bullets: ['1. Define the problem — clarify what needs to be understood', '2. Develop the research plan — choose methods and design', '3. Collect data — gather primary and/or secondary information', '4. Analyze data — find patterns and draw insights', '5. Present findings — communicate results clearly', '6. Make a decision — act on the research'] },
-          { name: 'Primary vs. secondary research', definition: 'Two fundamental categories of data sources, each with different cost, speed, and applicability.', bullets: ['Primary — new data collected directly for this specific study (surveys, interviews, observation)', 'Secondary — existing data from prior research, databases, government reports, or published studies'] },
-          { name: 'Qualitative research methods', definition: 'Exploratory methods that uncover the "why" behind consumer behavior through rich, narrative data.', bullets: ['Focus groups — 8–12 participants in a moderated group discussion', 'Depth interviews — one-on-one in-depth exploration of attitudes and motivations', 'Ethnography — observing consumers in their natural environment to capture real behavior'] },
-          { name: 'Quantitative research methods', definition: 'Numerical methods that measure "how many" and "how much," enabling statistical analysis and generalization.', bullets: ['Surveys — structured questionnaires administered at scale', 'Experiments — controlled tests that establish cause-and-effect', 'A/B testing — comparing two versions to identify the better performer'] },
-          { name: "McDonald's all-day breakfast case", definition: 'A real-world example showing how research can overturn management assumptions and correctly identify root causes.', bullets: ['Symptoms: declining sales and increasing customer wait times', 'Management assumption: menu fatigue (too many menu items)', 'Research methods: surveys, focus groups, and ethnography', 'Actual finding: kitchen operational inefficiencies, not menu size', 'Fix: scaled back ADB offerings and streamlined kitchen processes', 'Result: stabilized sales and improved customer satisfaction'] },
-          { name: 'Sampling methods', definition: 'Techniques for selecting a representative subset of the population to study.', bullets: ['Probability sampling — each unit has a known selection chance: random, stratified, cluster, systematic', 'Non-probability sampling — unknown selection probability: convenience, judgment, quota, snowball'] },
-          { name: 'Measurement scales & validity', definition: 'Frameworks for capturing data accurately and ensuring research measures what it intends to.', bullets: ['Nominal — categories with no order (e.g., gender, brand)', 'Ordinal — ranked order, unequal intervals (e.g., satisfaction ranking)', 'Interval — equal spacing, no true zero (e.g., temperature, Likert)', 'Ratio — equal spacing with absolute zero (e.g., age, sales)', 'Validity — does the measure capture what it intends to?', 'Reliability — are results consistent and reproducible?', 'Perceptual mapping — visualizes brand positioning in consumers\' minds', 'Conjoint analysis — determines how much each product attribute matters'] },
-        ],
-
-        flashcards: [
-          { front: 'What are the six steps of the marketing research process?', back: 'Define problem → Develop plan → Collect data → Analyze data → Present findings → Make decision' },
-          { front: 'How many people should be in a focus group?', back: 'Typically 8–12 participants to allow deep discussion without dominance.' },
-          { front: 'What is the difference between primary and secondary research?', back: 'Primary: new data collected directly (surveys, interviews). Secondary: existing data from external sources.' },
-          { front: 'What is ethnography?', back: 'Qualitative method where researchers observe consumers in their natural environment to understand behavior.' },
-          { front: 'Define probability sampling.', back: 'Each unit in population has known, non-zero chance of selection (random, stratified, cluster, systematic).' },
-          { front: 'What is conjoint analysis?', back: 'Research method determining how consumers value product attributes and features.' },
-          { front: 'Distinguish validity from reliability.', back: 'Validity: does research measure what it intends? Reliability: are results consistent and reproducible?' },
-          { front: 'What did the McDonald\'s All-Day Breakfast research reveal?', back: 'Operational inefficiencies in kitchen (not menu fatigue) caused declining sales and wait times.' }
-        ],
-
-        outline: [
-          {
-            title: '6-Step Marketing Research Process',
-            content: '1. Define the Problem: What needs to be understood?\n2. Develop the Plan: Design methodology\n3. Collect Data: Gather information\n4. Analyze Data: Find patterns and insights\n5. Present Findings: Communicate results\n6. Make Decision: Act on insights'
-          },
-          {
-            title: 'Research Methods',
-            content: 'Qualitative (explores "why"): Focus groups (8–12), depth interviews, ethnography\nQuantitative (measures "how much"): Surveys, experiments, scanner data'
-          },
-          {
-            title: 'Sampling Methods',
-            content: 'Probability (known selection probability): Random, stratified, cluster, systematic\nNon-probability (unknown probability): Convenience, judgment, quota, snowball'
-          },
-          {
-            title: 'Measurement & Analysis',
-            content: 'Scales: Nominal (categories) → Ordinal (rank) → Interval (equal spacing) → Ratio (absolute zero)\nValidity: Does it measure intended construct?\nReliability: Are results consistent?\nA/B testing, perceptual mapping, conjoint analysis'
-          }
-        ],
-
-        scenarios: [
-          {
-            title: 'McDonald\'s All-Day Breakfast Case Study',
-            scenario: 'McDonald\'s launched All-Day Breakfast but experienced declining sales and increasing order wait times. Management initially blamed menu fatigue (too many menu items). A research study was commissioned.',
-            concepts: [
-              { concept: 'Symptom vs. Root Cause', explanation: 'Declining sales (symptom) was caused by operational inefficiencies (root cause), not menu fatigue.' },
-              { concept: 'Research Methods Used', explanation: 'Surveys, focus groups, and ethnography revealed kitchen bottlenecks.' },
-              { concept: 'Solution Applied', explanation: 'Scaled back ADB offerings and streamlined kitchen processes.' },
-              { concept: 'Result', explanation: 'Stabilized sales and improved customer satisfaction through operational efficiency.' }
-            ]
-          },
-          {
-            title: 'New Smartphone Feature Testing',
-            scenario: 'A tech company wants to test two designs for a camera interface—Option A (button in corner) vs. Option B (gesture-based). They conduct an A/B test with 10,000 users split 50/50, measuring task completion time and satisfaction.',
-            concepts: [
-              { concept: 'A/B Testing', explanation: 'Comparing two versions to determine which performs better.' },
-              { concept: 'Quantitative Research', explanation: 'Measuring task time and satisfaction scores numerically.' },
-              { concept: 'Sample Size', explanation: '10,000 users is large enough for statistical significance.' },
-              { concept: 'Validity', explanation: 'Task completion and satisfaction are valid measures of usability.' }
-            ]
-          }
+      // ── Marketing Research ─────────────────────────────────────────
+      { topic: 'research', title: '6-Step Research Process', tag: 'Process',
+        definition: 'The systematic approach to solving marketing problems with data.',
+        points: [
+          '1. Define problem — distinguish symptoms from root causes',
+          '2. Develop research plan — methods, sampling, instruments',
+          '3. Collect data — primary and/or secondary',
+          '4. Analyze data — find patterns and insights',
+          '5. Present findings — communicate to decision-makers',
+          '6. Make decision — act on insights'
         ]
-      }
-    };
+      },
+      { topic: 'research', title: 'Primary vs Secondary Research', tag: 'Data Types',
+        definition: 'Two categories of data based on origin and purpose.',
+        points: [
+          'Primary — original data for this purpose: surveys, experiments, focus groups, ethnography',
+          'Secondary — existing data from another purpose: company records, government data, syndicated reports',
+          'Always exhaust secondary sources first (faster and cheaper)',
+          'Primary is more specific but costly and time-consuming'
+        ]
+      },
+      { topic: 'research', title: 'Qualitative vs Quantitative', tag: 'Research Types',
+        definition: 'Two philosophies with different goals and outputs.',
+        points: [
+          'Qualitative — non-numerical, exploratory, depth of understanding',
+          'Qual methods — focus groups (8–12 people), depth interviews, ethnography, projective techniques',
+          'Quantitative — numerical, statistically projectable, confirms hypotheses',
+          'Quant methods — surveys (online/phone/personal/mobile), experiments',
+          'Rule of thumb — qualitative = why/how; quantitative = how many/much'
+        ]
+      },
+      { topic: 'research', title: "McDonald's ADB Case", tag: 'Case Study',
+        definition: 'How research corrected a wrong management assumption.',
+        points: [
+          'Symptoms — declining breakfast sales, longer wait times, bottlenecks',
+          'Management assumed — menu fatigue (wrong)',
+          'Research methods — surveys, focus groups, employee interviews, ethnography',
+          'Actual insight — operational inefficiencies were the real problem',
+          'Action — scaled back ADB, streamlined kitchen operations',
+          'Result — sales stabilized, customer satisfaction improved'
+        ]
+      },
+      { topic: 'research', title: 'Sampling &amp; Measurement', tag: 'Methods',
+        definition: 'How researchers select participants and measure variables.',
+        points: [
+          'Probability sampling — random, stratified, cluster (allows statistical inference)',
+          'Non-probability — convenience, judgment, quota, snowball',
+          'Scales — nominal (categories), ordinal (rank), interval (equal gaps), ratio (true zero)',
+          'Validity = measures what it should; reliability = consistent results',
+          'Key tools — A/B testing, conjoint analysis, perceptual mapping'
+        ]
+      },
+    ];
 
-    // Quiz Logic
+    // ── placeholder so remaining code that refs studyData still runs ──
+    const studyData = {};
+
+
+        // Quiz Logic
     let currentQuiz = null;
     let currentQuestion = 0;
     let score = 0;
@@ -764,102 +718,55 @@
       document.getElementById('quizSetup').style.display = 'block';
     }
 
-    // Study Guide Logic
+    // ── Study Guide Logic ─────────────────────────────────────────────
+
+    const TOPIC_LABELS = { cb: 'Consumer Behavior', product: 'Product Management', research: 'Marketing Research' };
+
+    function renderConceptCards(topic) {
+      const filtered = topic === 'all' ? concepts : concepts.filter(c => c.topic === topic);
+
+      if (topic === 'all') {
+        // Group by topic with section labels
+        const groups = ['cb', 'product', 'research'];
+        return groups.map(t => {
+          const group = concepts.filter(c => c.topic === t);
+          return `
+            <div class="topic-section-label">${TOPIC_LABELS[t]}</div>
+            <div class="concept-card-grid">
+              ${group.map(c => conceptCardHTML(c)).join('')}
+            </div>`;
+        }).join('');
+      }
+
+      return `<div class="concept-card-grid">${filtered.map(c => conceptCardHTML(c)).join('')}</div>`;
+    }
+
+    function conceptCardHTML(c) {
+      return `
+        <div class="concept-card">
+          <div class="concept-card-header">
+            <div class="concept-card-title">${c.title}</div>
+            <div class="concept-card-tag">${c.tag}</div>
+          </div>
+          <div class="concept-card-def">${c.definition}</div>
+          <ul class="concept-card-bullets">
+            ${c.points.map(p => `<li>${p}</li>`).join('')}
+          </ul>
+        </div>`;
+    }
+
+    function updateStudyGuide() {
+      const activeTopic = document.querySelector('.topic-btn.active').dataset.topic;
+      document.getElementById('conceptCards').innerHTML = renderConceptCards(activeTopic);
+    }
+
     document.querySelectorAll('.topic-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        updateStudyContent();
+        updateStudyGuide();
       });
     });
-
-    document.querySelectorAll('.mode-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        updateStudyContent();
-      });
-    });
-
-    function updateStudyContent() {
-      const activeTopic = document.querySelector('.topic-btn.active').dataset.topic;
-      const activeMode = document.querySelector('.mode-tab.active').dataset.mode;
-
-      document.querySelectorAll('.study-content').forEach(el => el.classList.remove('active'));
-
-      let content = '';
-      const topicData = activeTopic === 'all' ? null : studyData[activeTopic];
-
-      if (activeMode === 'summary') {
-        const renderCards = (cards) => `
-          <div class="concept-grid">
-            ${cards.map(c => `
-              <div class="concept-card">
-                <div class="concept-card-title">${c.name}</div>
-                <div class="concept-card-def">${c.definition}</div>
-                <ul class="concept-card-bullets">
-                  ${c.bullets.map(b => `<li>${b}</li>`).join('')}
-                </ul>
-              </div>`).join('')}
-          </div>`;
-        if (activeTopic === 'all') {
-          content = Object.entries(studyData).map(([topic, data]) =>
-            `<div class="topic-section-label">${topic}</div>${renderCards(data.summary)}`
-          ).join('');
-        } else {
-          content = renderCards(topicData.summary);
-        }
-      } else if (activeMode === 'flashcards') {
-        const cards = activeTopic === 'all' ? Object.values(studyData).flatMap(d => d.flashcards) : topicData.flashcards;
-        content = `<div class="flashcard-grid">${cards.map((card, i) => `
-          <div class="flashcard-wrapper" onclick="flipFlashcard(this)" data-front="${card.front.replace(/"/g,'&quot;')}" data-back="${card.back.replace(/"/g,'&quot;')}">
-            <div class="flashcard">
-              <div class="flashcard-inner">
-                <div class="flashcard-front-text">${card.front}</div>
-                <div class="flashcard-back-text">${card.back}</div>
-              </div>
-            </div>
-            <div class="flashcard-hint">Tap to flip</div>
-          </div>`).join('')}
-        </div>`;
-      } else if (activeMode === 'outline') {
-        const sections = activeTopic === 'all' ? Object.entries(studyData).flatMap(([topic, data]) => data.outline.map(s => ({ ...s, topic }))) : topicData.outline.map(s => ({ ...s, topic: activeTopic }));
-        content = sections.map(section => `
-          <div class="section-header">${section.title}</div>
-          <div class="section-content"><pre style="white-space: pre-wrap; font-family: inherit;">${section.content}</pre></div>
-        `).join('');
-      } else if (activeMode === 'scenarios') {
-        const scens = activeTopic === 'all' ? Object.values(studyData).flatMap(d => d.scenarios) : topicData.scenarios;
-        content = scens.map(s => `
-          <div class="scenario-box">
-            <div class="scenario-title">${s.title}</div>
-            <div class="scenario-description">${s.scenario}</div>
-            ${s.concepts.map(c => `<div class="scenario-concept"><span class="concept-tag">${c.concept}:</span> ${c.explanation}</div>`).join('')}
-          </div>
-        `).join('');
-      }
-
-      const contentDiv = document.getElementById(activeMode);
-      contentDiv.innerHTML = content;
-      contentDiv.classList.add('active');
-
-      // Attach collapse handlers to outline
-      if (activeMode === 'outline') {
-        document.querySelectorAll('.section-header').forEach(header => {
-          header.addEventListener('click', () => {
-            header.classList.toggle('collapsed');
-            header.nextElementSibling.classList.toggle('hidden');
-          });
-        });
-      }
-    }
-
-    function flipFlashcard(wrapper) {
-      const card = wrapper.querySelector('.flashcard');
-      card.classList.toggle('flipped');
-      const hint = wrapper.querySelector('.flashcard-hint');
-      hint.textContent = card.classList.contains('flipped') ? 'Tap to flip back' : 'Tap to flip';
-    }
 
     // Navigation
     document.querySelectorAll('.nav-link').forEach(link => {
@@ -869,12 +776,12 @@
         link.classList.add('active');
         const pageId = link.dataset.page;
         document.getElementById(pageId).classList.add('active');
-        if (pageId === 'study') updateStudyContent();
+        if (pageId === 'study') updateStudyGuide();
       });
     });
 
-    // Initialize study content on first load
-    updateStudyContent();
+    // Init study guide on load
+    updateStudyGuide();
   </script>
 </body>
 </html>
