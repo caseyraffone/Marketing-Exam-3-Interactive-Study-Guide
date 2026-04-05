@@ -7,395 +7,344 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #f8f8f6;
-      color: #1a1a1a;
-      line-height: 1.6;
+      color: #444;
+      font-size: 14px;
+      line-height: 1.7;
     }
-    .container {
-      display: flex;
-      min-height: 100vh;
-    }
+    .container { display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ── */
     .sidebar {
       width: 220px;
-      background: white;
-      border-right: 0.5px solid #1a1a1a;
+      background: #fff;
+      border-right: 0.5px solid #e0e0e0;
       padding: 2rem 0;
       position: fixed;
       height: 100vh;
       overflow-y: auto;
     }
-    .sidebar-title {
-      font-size: 12px;
+    .sidebar-logo {
+      font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.2px;
+      color: #999;
       padding: 0 1.5rem;
-      margin-bottom: 1.5rem;
-      color: #1a1a1a;
+      margin-bottom: 1.75rem;
     }
     .nav-link {
       display: block;
-      padding: 0.875rem 1.5rem;
-      color: #1a1a1a;
+      padding: 0.75rem 1.5rem;
+      color: #444;
       text-decoration: none;
       cursor: pointer;
       border-left: 2px solid transparent;
-      font-size: 14px;
-      transition: all 0.2s;
+      font-size: 13px;
+      transition: all 0.15s;
     }
-    .nav-link:hover {
-      background: #f8f8f6;
-    }
+    .nav-link:hover { background: #f8f8f6; color: #1a1a1a; }
     .nav-link.active {
       border-left-color: #1a1a1a;
       background: #f8f8f6;
-      font-weight: 500;
-    }
-    .main {
-      margin-left: 220px;
-      flex: 1;
-      padding: 2rem;
-    }
-    .page {
-      display: none;
-    }
-    .page.active {
-      display: block;
-    }
-    .card {
-      background: white;
-      border: 0.5px solid #1a1a1a;
-      padding: 2rem;
-      margin-bottom: 1.5rem;
-      border-radius: 0;
-    }
-    h1 {
-      font-size: 32px;
-      margin-bottom: 2rem;
-      font-weight: 400;
-      letter-spacing: -0.5px;
-    }
-    h2 {
-      font-size: 20px;
-      margin-bottom: 1.5rem;
-      font-weight: 500;
-    }
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-    label {
-      display: block;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-      text-transform: capitalize;
-    }
-    select, input {
-      width: 100%;
-      padding: 0.75rem;
-      border: 0.5px solid #1a1a1a;
-      font-family: inherit;
-      font-size: 14px;
-      background: white;
       color: #1a1a1a;
+      font-weight: 500;
     }
-    select:focus, input:focus {
-      outline: none;
-      box-shadow: inset 0 0 0 1px #1a1a1a;
+
+    /* ── Main area ── */
+    .main { margin-left: 220px; flex: 1; padding: 2.5rem 2.5rem 4rem; max-width: 900px; }
+    .page { display: none; }
+    .page.active { display: block; }
+    h1 { font-size: 26px; font-weight: 500; color: #1a1a1a; margin-bottom: 0.375rem; letter-spacing: -0.3px; }
+    .page-subtitle { font-size: 13px; color: #999; margin-bottom: 2rem; }
+    h2 { font-size: 17px; font-weight: 500; color: #1a1a1a; margin-bottom: 1.25rem; }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border: 0.5px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 1.25rem;
     }
-    .slider-container {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+
+    /* ── Form elements ── */
+    .form-group { margin-bottom: 1.5rem; }
+    label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: #999; margin-bottom: 0.5rem; }
+    select {
+      width: 100%;
+      height: 40px;
+      padding: 0 0.75rem;
+      border: 0.5px solid #d0d0d0;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+      background: #fff;
+      color: #1a1a1a;
+      cursor: pointer;
     }
+    select:focus { outline: none; border-color: #1a1a1a; }
+    .slider-container { display: flex; align-items: center; gap: 1rem; }
     input[type="range"] {
       flex: 1;
-      height: 4px;
+      height: 3px;
       -webkit-appearance: none;
       appearance: none;
-      background: #f0f0ee;
+      background: #e8e8e6;
       outline: none;
       border: none;
+      border-radius: 2px;
       padding: 0;
     }
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      appearance: none;
-      width: 16px;
-      height: 16px;
+      width: 16px; height: 16px;
       background: #1a1a1a;
+      border-radius: 50%;
       cursor: pointer;
-      border: 0.5px solid #1a1a1a;
     }
     input[type="range"]::-moz-range-thumb {
-      width: 16px;
-      height: 16px;
+      width: 16px; height: 16px;
       background: #1a1a1a;
+      border-radius: 50%;
       cursor: pointer;
-      border: 0.5px solid #1a1a1a;
-    }
-    .slider-value {
-      min-width: 40px;
-      text-align: center;
-      font-weight: 500;
-      font-size: 14px;
-    }
-    button {
-      padding: 0.875rem 2rem;
-      background: #1a1a1a;
-      color: white;
       border: none;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.2s;
     }
-    button:hover {
-      background: #333;
-    }
-    button:active {
-      background: #000;
-    }
-    .progress-bar {
-      height: 4px;
-      background: #f0f0ee;
-      margin-bottom: 2rem;
-      border: 0.5px solid #1a1a1a;
-    }
-    .progress {
-      height: 100%;
+    .slider-value { min-width: 28px; text-align: center; font-weight: 600; font-size: 13px; color: #1a1a1a; }
+
+    /* ── Buttons ── */
+    button {
+      height: 40px;
+      padding: 0 1.25rem;
       background: #1a1a1a;
-      transition: width 0.3s;
-    }
-    .question-container {
-      margin-bottom: 2rem;
-    }
-    .question-text {
-      font-size: 18px;
-      font-weight: 500;
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-    }
-    .choices {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-    .choice {
-      padding: 1rem;
-      border: 0.5px solid #1a1a1a;
-      cursor: pointer;
-      background: white;
-      transition: all 0.2s;
-      font-size: 14px;
-    }
-    .choice:hover {
-      background: #f8f8f6;
-    }
-    .choice.selected {
-      background: #f0f0ee;
-    }
-    .choice.correct {
-      background: #e8f5e9;
-      border-color: #2e7d32;
-    }
-    .choice.incorrect {
-      background: #ffebee;
-      border-color: #c62828;
-    }
-    .choice.disabled {
-      cursor: not-allowed;
-      opacity: 0.7;
-    }
-    .explanation {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: #fafaf8;
-      border-left: 2px solid #1a1a1a;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-    .results-screen {
-      text-align: center;
-    }
-    .score-display {
-      font-size: 64px;
-      font-weight: 300;
-      margin: 2rem 0;
-      letter-spacing: -1px;
-    }
-    .grade {
-      font-size: 48px;
-      font-weight: 500;
-      margin-bottom: 1rem;
-    }
-    .review-section {
-      margin-top: 2rem;
-      text-align: left;
-    }
-    .review-item {
-      margin-bottom: 1.5rem;
-      padding: 1.5rem;
-      border: 0.5px solid #1a1a1a;
-      background: white;
-    }
-    .review-question {
-      font-weight: 500;
-      margin-bottom: 0.75rem;
-    }
-    .review-answer {
-      font-size: 14px;
-      margin: 0.5rem 0;
-    }
-    .correct-answer { color: #2e7d32; font-weight: 500; }
-    .your-answer { color: #c62828; }
-    .topic-filters {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .topic-btn {
-      padding: 0.5rem 1rem;
-      border: 0.5px solid #1a1a1a;
-      background: white;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
       font-size: 13px;
-      transition: all 0.2s;
+      font-weight: 500;
+      font-family: inherit;
+      transition: background 0.15s;
     }
-    .topic-btn.active {
-      background: #1a1a1a;
-      color: white;
+    button:hover { background: #333; }
+    button:active { background: #000; }
+
+    /* ── Progress bar ── */
+    .progress-bar { height: 3px; background: #f0f0ee; border-radius: 2px; margin-bottom: 2rem; overflow: hidden; }
+    .progress { height: 100%; background: #1a1a1a; transition: width 0.3s; }
+    .progress-label { font-size: 12px; color: #999; margin-bottom: 0.5rem; }
+
+    /* ── Quiz question ── */
+    .question-container { margin-bottom: 1.5rem; }
+    .question-text { font-size: 16px; font-weight: 500; color: #1a1a1a; margin-bottom: 1.25rem; line-height: 1.55; }
+    .choices { display: flex; flex-direction: column; gap: 0.625rem; }
+    .choice {
+      padding: 0.875rem 1rem;
+      border: 0.5px solid #d8d8d6;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #fff;
+      font-size: 13px;
+      color: #1a1a1a;
+      transition: border-color 0.15s, background 0.15s;
     }
-    .mode-tabs {
-      display: flex;
-      gap: 0;
-      margin-bottom: 1.5rem;
-      border-bottom: 0.5px solid #1a1a1a;
+    .choice:hover { border-color: #1a1a1a; background: #fafaf8; }
+    .choice.correct { background: #f0faf1; border-color: #2e7d32; color: #1a4d1e; }
+    .choice.incorrect { background: #fff5f5; border-color: #c62828; color: #7a1a1a; }
+    .choice.disabled { cursor: not-allowed; }
+    .explanation {
+      margin-top: 1rem;
+      padding: 0.875rem 1rem;
+      background: #fafaf8;
+      border-left: 2px solid #1a1a1a;
+      border-radius: 0 4px 4px 0;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #444;
     }
+
+    /* ── Results ── */
+    .results-screen { text-align: center; padding: 1rem 0; }
+    .grade { font-size: 56px; font-weight: 300; color: #1a1a1a; letter-spacing: -2px; margin-bottom: 0.25rem; }
+    .score-display { font-size: 18px; color: #666; margin-bottom: 2rem; }
+    .review-section { margin-top: 2rem; text-align: left; }
+    .review-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: #999; margin-bottom: 1rem; }
+    .review-item {
+      margin-bottom: 1rem;
+      padding: 1.25rem;
+      border: 0.5px solid #e8e8e6;
+      border-radius: 8px;
+      background: #fff;
+    }
+    .review-question { font-weight: 500; color: #1a1a1a; margin-bottom: 0.625rem; font-size: 13px; }
+    .review-answer { font-size: 13px; margin: 0.3rem 0; }
+    .correct-answer { color: #2e7d32; font-weight: 500; }
+    .your-answer { color: #c62828; }
+    .review-topic { font-size: 11px; color: #aaa; margin-top: 0.5rem; }
+
+    /* ── Topic filter buttons ── */
+    .topic-filters { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .topic-btn {
+      height: 34px;
+      padding: 0 1rem;
+      border: 0.5px solid #d0d0d0;
+      border-radius: 6px;
+      background: #fff;
+      color: #444;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 400;
+      font-family: inherit;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .topic-btn:hover { border-color: #1a1a1a; color: #1a1a1a; }
+    .topic-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+    /* ── Mode tabs ── */
+    .mode-tabs { display: flex; border-bottom: 0.5px solid #e0e0e0; margin-bottom: 1.75rem; gap: 0; }
     .mode-tab {
-      padding: 0.75rem 1.5rem;
+      padding: 0.625rem 1.25rem;
       border: none;
+      border-bottom: 2px solid transparent;
       background: transparent;
       cursor: pointer;
-      font-size: 14px;
-      color: #1a1a1a;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
+      font-size: 13px;
+      font-family: inherit;
+      color: #888;
+      font-weight: 400;
+      transition: all 0.15s;
+      height: auto;
+      border-radius: 0;
     }
-    .mode-tab.active {
-      border-bottom-color: #1a1a1a;
-      font-weight: 500;
+    .mode-tab:hover { color: #1a1a1a; background: transparent; }
+    .mode-tab.active { border-bottom-color: #1a1a1a; color: #1a1a1a; font-weight: 500; }
+    .study-content { display: none; }
+    .study-content.active { display: block; }
+
+    /* ── Topic section label ── */
+    .topic-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #aaa;
+      margin: 2rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 0.5px solid #f0f0ee;
     }
-    .study-content {
-      display: none;
+    .topic-section-label:first-child { margin-top: 0; }
+
+    /* ── Summary concept cards ── */
+    .concept-grid { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem; }
+    .concept-card {
+      background: #fff;
+      border: 0.5px solid #e8e8e6;
+      border-radius: 8px;
+      padding: 20px 22px;
     }
-    .study-content.active {
-      display: block;
+    .concept-card-title { font-size: 15px; font-weight: 500; color: #1a1a1a; margin-bottom: 0.375rem; }
+    .concept-card-def { font-size: 13px; color: #555; line-height: 1.65; margin-bottom: 0.75rem; }
+    .concept-card-bullets { list-style: none; padding: 0; margin: 0; }
+    .concept-card-bullets li {
+      font-size: 13px;
+      color: #555;
+      padding: 0.2rem 0 0.2rem 1rem;
+      position: relative;
+      line-height: 1.55;
     }
-    .flashcard-wrapper {
-      perspective: 1000px;
-    }
+    .concept-card-bullets li::before { content: '–'; position: absolute; left: 0; color: #ccc; }
+
+    /* ── Flashcards ── */
+    .flashcard-grid { display: flex; flex-direction: column; gap: 1.25rem; }
+    .flashcard-wrapper { cursor: pointer; }
     .flashcard {
-      width: 100%;
-      min-height: 300px;
-      background: white;
-      border: 0.5px solid #1a1a1a;
+      background: #fff;
+      border: 0.5px solid #e0e0e0;
+      border-radius: 8px;
+      min-height: 160px;
       padding: 2rem;
-      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      font-size: 18px;
-      font-weight: 500;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
+      transition: box-shadow 0.15s;
     }
-    .flashcard.flipped {
-      transform: rotateY(180deg);
+    .flashcard:hover { border-color: #1a1a1a; }
+    .flashcard-inner {
+      width: 100%;
+      position: relative;
+      transition: opacity 0.25s;
     }
-    .flashcard-content {
-      backface-visibility: hidden;
-    }
-    .flashcard.flipped .flashcard-content {
-      transform: rotateY(180deg);
-    }
+    .flashcard-front-text { font-size: 15px; font-weight: 500; color: #1a1a1a; }
+    .flashcard-back-text { font-size: 14px; color: #444; line-height: 1.6; display: none; }
+    .flashcard.flipped .flashcard-front-text { display: none; }
+    .flashcard.flipped .flashcard-back-text { display: block; }
+    .flashcard-hint { font-size: 11px; color: #bbb; text-align: center; margin-top: 0.5rem; }
+
+    /* ── Outline ── */
+    .outline-item { margin-bottom: 0.625rem; }
     .section-header {
       cursor: pointer;
-      padding: 1rem;
-      background: #f8f8f6;
-      border: 0.5px solid #1a1a1a;
+      padding: 0.875rem 1rem;
+      background: #fafaf8;
+      border: 0.5px solid #e8e8e6;
+      border-radius: 6px;
       font-weight: 500;
+      font-size: 13px;
+      color: #1a1a1a;
       user-select: none;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.5rem;
     }
-    .section-header::after {
-      content: '▼';
-      display: inline-block;
-      transition: transform 0.3s;
-      font-size: 12px;
-    }
-    .section-header.collapsed::after {
-      transform: rotate(-90deg);
-    }
+    .section-header::after { content: '▾'; font-size: 14px; color: #aaa; transition: transform 0.2s; }
+    .section-header.collapsed::after { transform: rotate(-90deg); }
     .section-content {
-      padding: 1.5rem;
-      border: 0.5px solid #1a1a1a;
+      padding: 1rem 1rem 1rem 1.25rem;
+      border: 0.5px solid #e8e8e6;
       border-top: none;
-      margin-bottom: 1rem;
-      display: block;
+      border-radius: 0 0 6px 6px;
+      margin-bottom: 0;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #555;
     }
-    .section-content.hidden {
-      display: none;
-    }
+    .section-content.hidden { display: none; }
+
+    /* ── Scenarios ── */
     .scenario-box {
-      margin-bottom: 2rem;
-      padding: 1.5rem;
-      border: 0.5px solid #1a1a1a;
-      background: white;
-    }
-    .scenario-title {
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-      font-size: 16px;
-    }
-    .scenario-description {
+      background: #fff;
+      border: 0.5px solid #e8e8e6;
+      border-radius: 8px;
+      padding: 20px 22px;
       margin-bottom: 1rem;
-      font-size: 14px;
-      line-height: 1.6;
     }
-    .concept { font-weight: 600; }
-    .loading { text-align: center; padding: 2rem; }
+    .scenario-title { font-size: 15px; font-weight: 500; color: #1a1a1a; margin-bottom: 0.625rem; }
+    .scenario-description { font-size: 13px; color: #666; line-height: 1.65; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 0.5px solid #f0f0ee; }
+    .scenario-concept { margin-bottom: 0.5rem; font-size: 13px; color: #444; }
+    .concept-tag { font-weight: 600; color: #1a1a1a; }
+
+    /* ── Misc ── */
+    .loading { text-align: center; padding: 3rem 2rem; color: #999; font-size: 13px; }
     .spinner {
       border: 2px solid #f0f0ee;
-      border-top: 2px solid #1a1a1a;
+      border-top-color: #1a1a1a;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto;
+      width: 32px; height: 32px;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 1rem;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
     .error {
-      background: #ffebee;
-      border: 0.5px solid #c62828;
-      padding: 1rem;
+      background: #fff5f5;
+      border: 0.5px solid #f5c0c0;
+      border-radius: 6px;
+      padding: 0.875rem 1rem;
       margin-bottom: 1rem;
       color: #c62828;
-      font-size: 14px;
-    }
-    .controls {
-      display: flex;
-      gap: 1rem;
-      margin-top: 2rem;
+      font-size: 13px;
     }
   </style>
 </head>
@@ -493,13 +442,15 @@
   <script>
     const studyData = {
       'Consumer Behavior': {
-        summary: `Consumer Decision Process follows five key steps: problem recognition (consumer identifies a need), information search (seeking knowledge), alternative evaluation (comparing options), outlet selection (choosing where to buy), and postpurchase behavior (satisfaction and loyalty).
-
-Internal influences shape consumer decisions. Perception involves selective exposure, selective attention, selective distortion, and selective retention. The Just Noticeable Difference (JND) and Weber's Law explain how consumers detect changes. Learning occurs through classical conditioning (associating stimuli) and operant conditioning (rewards/punishments). Maslow's hierarchy of needs—physiological, safety, social, esteem, self-actualization—drives purchasing. Attitudes combine cognitive (beliefs), affective (feelings), and behavioral components.
-
-External influences include culture (shared values), subcultures (groups within culture), and reference groups that provide informational influence (data), normative influence (social pressure), and identification influence (aspirational). Family roles—initiator, influencer, decider, purchaser, user—differ for each product.
-
-The evoked set is the group of brands consumers consider. Involvement levels vary (high-involvement = careful deliberation; low-involvement = minimal thought). Cognitive dissonance—post-purchase doubt—drives reassurance-seeking. Hedonic needs emphasize pleasure; utilitarian needs emphasize function.`,
+        summary: [
+          { name: 'Consumer decision process', definition: 'The five-step journey a consumer takes from identifying a need through evaluating the purchase.', bullets: ['Problem recognition — consumer identifies a need or gap', 'Information search — seeking knowledge about solutions', 'Alternative evaluation — comparing options against criteria', 'Outlet selection — choosing where to buy', 'Postpurchase behavior — satisfaction, loyalty, or dissonance'] },
+          { name: 'Perception', definition: 'How consumers select, organize, and interpret sensory information to form a meaningful picture of the world.', bullets: ['Selective exposure — choosing what to notice', 'Selective attention — focusing on relevant stimuli', 'Selective distortion — interpreting info to fit existing beliefs', 'Selective retention — remembering information that supports attitudes', 'JND / Weber\'s Law — minimum change required for a consumer to notice a difference'] },
+          { name: 'Learning', definition: 'Changes in behavior resulting from experience, information, or repeated exposure.', bullets: ['Classical conditioning — pairing a neutral stimulus with an unconditioned one (Pavlov)', 'Operant conditioning — reinforcement and punishment shape future behavior'] },
+          { name: "Maslow's hierarchy of needs", definition: 'A motivational model ranking human needs from basic survival to self-fulfillment; lower levels must be satisfied first.', bullets: ['1. Physiological — food, water, shelter', '2. Safety — security, stability', '3. Social — belonging, love, community', '4. Esteem — status, recognition, achievement', '5. Self-actualization — realizing full potential'] },
+          { name: 'Attitudes', definition: 'Learned predispositions to respond in a consistently favorable or unfavorable way toward a person, object, or idea.', bullets: ['Cognitive component — beliefs and knowledge about the object', 'Affective component — feelings and emotions', 'Behavioral component — action tendencies and intentions (ABC model)'] },
+          { name: 'Social & external influences', definition: 'Outside forces from culture, groups, and family that shape what consumers buy and why.', bullets: ['Culture — shared values and norms of a society', 'Subcultures — distinct groups within a broader culture', 'Reference groups — informational (data), normative (social pressure), identification (aspirational)', 'Family roles: initiator, influencer, decider, purchaser, user'] },
+          { name: 'Key decision concepts', definition: 'Additional factors that affect how consumers make and feel about choices.', bullets: ['Evoked set — the brands a consumer actively considers', 'High involvement — deliberate, effortful decision-making', 'Low involvement — automatic, habitual decisions', 'Cognitive dissonance — post-purchase doubt or regret', 'Hedonic needs — pleasure-seeking and emotional satisfaction', 'Utilitarian needs — functional, problem-solving purchases'] },
+        ],
 
         flashcards: [
           { front: 'What are the five steps of the consumer decision process?', back: 'Problem recognition → Information search → Alternative evaluation → Outlet selection → Postpurchase behavior' },
@@ -555,17 +506,14 @@ The evoked set is the group of brands consumers consider. Involvement levels var
       },
 
       'Product Management': {
-        summary: `Service characteristics define product strategy. Intangibility means services cannot be touched or tested. Inseparability means production and consumption occur simultaneously. Heterogeneity—inconsistent service quality—is fixed through standardization and employee training. Perishability—inability to store services—requires capacity management and demand forecasting.
-
-Product line depth (number of variants per category) should be optimized: companies decrease depth to reduce consumer confusion, preserve shelf space, simplify supply chains, reduce manufacturing complexity, and focus resources on high-margin products.
-
-Product mix width refers to the number of product categories offered. SKUs (stock-keeping units) identify unique products. Cannibalization occurs when one product steals sales from another.
-
-The product life cycle has four stages: introduction (slow sales, high costs), growth (rapid sales, economies of scale), maturity (peak sales, high competition), and decline (falling sales, product phase-out).
-
-New product development follows seven stages: strategy (mission and objectives), idea generation (brainstorming), idea screening (eliminating poor ideas), business analysis (financial projections), development (prototype creation), test marketing (limited market launch), and commercialization (full launch).
-
-Brand equity builds through awareness, positive associations, perceived quality, and loyalty. Packaging serves protection, communication, convenience, and promotional functions.`,
+        summary: [
+          { name: 'Four service characteristics', definition: 'Unique properties that distinguish services from physical products, each requiring a distinct management response.', bullets: ['Intangibility — cannot be seen, touched, or tested before purchase', 'Inseparability — production and consumption occur simultaneously', 'Heterogeneity — quality varies person to person; fix with training and standardization', 'Perishability — cannot be stored or inventoried; fix with capacity management'] },
+          { name: 'Product line depth', definition: 'The number of variants within a single product category. Companies deliberately reduce depth to sharpen focus.', bullets: ['Reduces consumer confusion from too many similar choices', 'Preserves retail shelf space for top performers', 'Simplifies supply chain and procurement', 'Reduces manufacturing complexity and cost', 'Concentrates resources on high-margin products'] },
+          { name: 'Product mix, SKUs & cannibalization', definition: 'The architecture of a company\'s full product portfolio and the risks of overlap within it.', bullets: ['Product mix width — number of distinct product categories offered', 'SKU (stock-keeping unit) — unique identifier for each individual product variant', 'Cannibalization — when a new product steals sales from an existing one in the same portfolio'] },
+          { name: 'Product life cycle', definition: 'The four stages a product passes through from market entry to eventual exit.', bullets: ['Introduction — slow sales, high costs, limited awareness', 'Growth — rapid sales increase, new competitors enter, economies of scale', 'Maturity — peak sales, intense competition, price pressure, market saturation', 'Decline — falling sales, reduced investment, product phase-out'] },
+          { name: 'New product development (7 stages)', definition: 'A structured process for bringing new products to market while filtering out weak ideas early.', bullets: ['1. Strategy — define mission and objectives', '2. Idea generation — brainstorming and sourcing new concepts', '3. Idea screening — eliminate poor or risky ideas early', '4. Business analysis — financial projections and feasibility', '5. Development — build and test a prototype', '6. Test marketing — limited geographic launch to assess response', '7. Commercialization — full-scale market launch'] },
+          { name: 'Brand equity & packaging', definition: 'The added value a strong brand brings, and the role packaging plays in delivering it at point of sale.', bullets: ['Brand awareness — recognition and recall in the consumer\'s mind', 'Brand associations — mental connections and emotional meaning', 'Perceived quality — consumer\'s subjective assessment of superiority', 'Brand loyalty — consistent repeat purchase behavior', 'Packaging functions: protection, communication, convenience, promotion'] },
+        ],
 
         flashcards: [
           { front: 'Define intangibility in services.', back: 'Services cannot be seen, touched, tasted, or held before purchase.' },
@@ -620,17 +568,15 @@ Brand equity builds through awareness, positive associations, perceived quality,
       },
 
       'Marketing Research': {
-        summary: `The six-step marketing research process is: define the problem, develop the research plan, collect data, analyze data, present findings, and make strategic decisions.
-
-Primary research involves collecting new data through focus groups (8–12 participants discussing product in depth), depth interviews (one-on-one exploration), ethnography (observing consumers in natural settings), surveys (questionnaires), and experiments (controlled tests). Secondary research uses existing data from government reports, academic papers, and company databases.
-
-Qualitative research explores "why" and "how" through narrative and subjective insights. Quantitative research measures "how much" or "how many" through numerical analysis.
-
-The McDonald's All-Day Breakfast case illustrates research in action. Symptoms: declining sales and rising wait times. Management initially assumed menu fatigue. Research (surveys, focus groups, ethnography) revealed operational inefficiencies in the kitchen. Solution: scaled back the ADB menu and streamlined processes. Result: stabilized sales and improved customer satisfaction.
-
-Sampling methods include probability sampling (random, stratified, cluster, systematic—each unit has known selection probability) and non-probability sampling (convenience, judgment, quota, snowball—selection probability unknown). Measurement scales range from nominal (categories) to ratio (absolute zero with equal intervals).
-
-Validity measures whether the research truly captures what it aims to measure. Reliability measures consistency and reproducibility. A/B testing compares two versions to determine the better performer. Perceptual mapping visualizes product positions in consumer minds. Conjoint analysis determines attribute importance in purchase decisions.`,
+        summary: [
+          { name: '6-step research process', definition: 'A systematic framework for gathering and applying information to support better marketing decisions.', bullets: ['1. Define the problem — clarify what needs to be understood', '2. Develop the research plan — choose methods and design', '3. Collect data — gather primary and/or secondary information', '4. Analyze data — find patterns and draw insights', '5. Present findings — communicate results clearly', '6. Make a decision — act on the research'] },
+          { name: 'Primary vs. secondary research', definition: 'Two fundamental categories of data sources, each with different cost, speed, and applicability.', bullets: ['Primary — new data collected directly for this specific study (surveys, interviews, observation)', 'Secondary — existing data from prior research, databases, government reports, or published studies'] },
+          { name: 'Qualitative research methods', definition: 'Exploratory methods that uncover the "why" behind consumer behavior through rich, narrative data.', bullets: ['Focus groups — 8–12 participants in a moderated group discussion', 'Depth interviews — one-on-one in-depth exploration of attitudes and motivations', 'Ethnography — observing consumers in their natural environment to capture real behavior'] },
+          { name: 'Quantitative research methods', definition: 'Numerical methods that measure "how many" and "how much," enabling statistical analysis and generalization.', bullets: ['Surveys — structured questionnaires administered at scale', 'Experiments — controlled tests that establish cause-and-effect', 'A/B testing — comparing two versions to identify the better performer'] },
+          { name: "McDonald's all-day breakfast case", definition: 'A real-world example showing how research can overturn management assumptions and correctly identify root causes.', bullets: ['Symptoms: declining sales and increasing customer wait times', 'Management assumption: menu fatigue (too many menu items)', 'Research methods: surveys, focus groups, and ethnography', 'Actual finding: kitchen operational inefficiencies, not menu size', 'Fix: scaled back ADB offerings and streamlined kitchen processes', 'Result: stabilized sales and improved customer satisfaction'] },
+          { name: 'Sampling methods', definition: 'Techniques for selecting a representative subset of the population to study.', bullets: ['Probability sampling — each unit has a known selection chance: random, stratified, cluster, systematic', 'Non-probability sampling — unknown selection probability: convenience, judgment, quota, snowball'] },
+          { name: 'Measurement scales & validity', definition: 'Frameworks for capturing data accurately and ensuring research measures what it intends to.', bullets: ['Nominal — categories with no order (e.g., gender, brand)', 'Ordinal — ranked order, unequal intervals (e.g., satisfaction ranking)', 'Interval — equal spacing, no true zero (e.g., temperature, Likert)', 'Ratio — equal spacing with absolute zero (e.g., age, sales)', 'Validity — does the measure capture what it intends to?', 'Reliability — are results consistent and reproducible?', 'Perceptual mapping — visualizes brand positioning in consumers\' minds', 'Conjoint analysis — determines how much each product attribute matters'] },
+        ],
 
         flashcards: [
           { front: 'What are the six steps of the marketing research process?', back: 'Define problem → Develop plan → Collect data → Analyze data → Present findings → Make decision' },
@@ -845,21 +791,37 @@ Validity measures whether the research truly captures what it aims to measure. R
       const topicData = activeTopic === 'all' ? null : studyData[activeTopic];
 
       if (activeMode === 'summary') {
+        const renderCards = (cards) => `
+          <div class="concept-grid">
+            ${cards.map(c => `
+              <div class="concept-card">
+                <div class="concept-card-title">${c.name}</div>
+                <div class="concept-card-def">${c.definition}</div>
+                <ul class="concept-card-bullets">
+                  ${c.bullets.map(b => `<li>${b}</li>`).join('')}
+                </ul>
+              </div>`).join('')}
+          </div>`;
         if (activeTopic === 'all') {
-          content = Object.entries(studyData).map(([topic, data]) => `<h3>${topic}</h3><p>${data.summary}</p>`).join('');
+          content = Object.entries(studyData).map(([topic, data]) =>
+            `<div class="topic-section-label">${topic}</div>${renderCards(data.summary)}`
+          ).join('');
         } else {
-          content = `<p>${topicData.summary}</p>`;
+          content = renderCards(topicData.summary);
         }
       } else if (activeMode === 'flashcards') {
         const cards = activeTopic === 'all' ? Object.values(studyData).flatMap(d => d.flashcards) : topicData.flashcards;
-        content = cards.map((card, i) => `
-          <div class="flashcard-wrapper" onclick="flipFlashcard(this)">
-            <div class="flashcard" data-flipped="false">
-              <div class="flashcard-content">${card.front}</div>
+        content = `<div class="flashcard-grid">${cards.map((card, i) => `
+          <div class="flashcard-wrapper" onclick="flipFlashcard(this)" data-front="${card.front.replace(/"/g,'&quot;')}" data-back="${card.back.replace(/"/g,'&quot;')}">
+            <div class="flashcard">
+              <div class="flashcard-inner">
+                <div class="flashcard-front-text">${card.front}</div>
+                <div class="flashcard-back-text">${card.back}</div>
+              </div>
             </div>
-          </div>
-          <p style="text-align: center; margin: 1rem 0; font-size: 12px; color: #666;">Click to reveal answer</p>
-        `).join('');
+            <div class="flashcard-hint">Tap to flip</div>
+          </div>`).join('')}
+        </div>`;
       } else if (activeMode === 'outline') {
         const sections = activeTopic === 'all' ? Object.entries(studyData).flatMap(([topic, data]) => data.outline.map(s => ({ ...s, topic }))) : topicData.outline.map(s => ({ ...s, topic: activeTopic }));
         content = sections.map(section => `
@@ -872,7 +834,7 @@ Validity measures whether the research truly captures what it aims to measure. R
           <div class="scenario-box">
             <div class="scenario-title">${s.title}</div>
             <div class="scenario-description">${s.scenario}</div>
-            ${s.concepts.map(c => `<div style="margin-bottom: 0.75rem;"><span class="concept">${c.concept}:</span> ${c.explanation}</div>`).join('')}
+            ${s.concepts.map(c => `<div class="scenario-concept"><span class="concept-tag">${c.concept}:</span> ${c.explanation}</div>`).join('')}
           </div>
         `).join('');
       }
@@ -895,19 +857,8 @@ Validity measures whether the research truly captures what it aims to measure. R
     function flipFlashcard(wrapper) {
       const card = wrapper.querySelector('.flashcard');
       card.classList.toggle('flipped');
-      const isFlipped = card.classList.contains('flipped');
-      const data = card.parentElement.parentElement;
-      const flashcard = studyData[Object.keys(studyData)[0]].flashcards[0]; // Simplified for demo
-
-      if (isFlipped) {
-        const allCards = Object.values(studyData).flatMap(d => d.flashcards);
-        const cardIndex = Array.from(document.querySelectorAll('.flashcard-wrapper')).indexOf(wrapper);
-        card.querySelector('.flashcard-content').textContent = allCards[cardIndex].back;
-      } else {
-        const allCards = Object.values(studyData).flatMap(d => d.flashcards);
-        const cardIndex = Array.from(document.querySelectorAll('.flashcard-wrapper')).indexOf(wrapper);
-        card.querySelector('.flashcard-content').textContent = allCards[cardIndex].front;
-      }
+      const hint = wrapper.querySelector('.flashcard-hint');
+      hint.textContent = card.classList.contains('flipped') ? 'Tap to flip back' : 'Tap to flip';
     }
 
     // Navigation
